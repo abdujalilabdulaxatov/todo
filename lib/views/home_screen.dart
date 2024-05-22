@@ -1,0 +1,115 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controllers/todo_controllers.dart';
+import 'package:flutter_application_1/views/widgets/add_todo.dart';
+import 'package:flutter_application_1/views/widgets/todo_widget.dart';
+import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  TodoControllers todoControllers = TodoControllers();
+  @override
+  Widget build(BuildContext context) {
+    Map exercise = todoControllers.todoChecks();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.amber,
+        title: Text(
+          'Todo App',
+          style: GoogleFonts.poppins(
+              textStyle: TextStyle(fontWeight: FontWeight.w600)),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          Map<String, dynamic>? data = await showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (ctx) {
+              return AddTodo();
+            },
+          );
+          if (data?['date'].isEmpty) {
+            todoControllers.add(
+                data!['name'], DateTime.now().toString().split(' ')[0], false);
+          } else {
+            todoControllers.add(data!['name'], data['date'], false);
+          }
+          setState(() {});
+        },
+        child: Icon(Icons.add),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Gap(30),
+          Center(
+            child: Container(
+              width: 370,
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Bajarilgan: ${exercise['bajarilgan']}',
+                    style: TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 17),
+                  ),
+                  Text(
+                    'Bajarilmagan: ${exercise['bajarilmagan']}',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 17),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            height: 600,
+            child: ListView.builder(
+                itemCount: todoControllers.list.length,
+                itemBuilder: (ctx, index) {
+                  return TodoWidget(
+                    todoModels: todoControllers.list[index],
+                    onDelete: () {
+                      todoControllers.delete(index);
+                      setState(() {});
+                    },
+                    onEdit: () async {
+                      Map<String, dynamic>? data = await showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (ctx) {
+                          return AddTodo();
+                        },
+                      );
+                      if (data?['date'].isEmpty) {
+                        todoControllers.edit(data!['name'],
+                            DateTime.now().toString().split(' ')[0], index);
+                      } else {
+                        todoControllers.edit(
+                            data!['name'], data['date'], index);
+                      }
+                      setState(() {});
+                    },
+                    onPress: () {
+                      setState(() {});
+                    },
+                  );
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+}
