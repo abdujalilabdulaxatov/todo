@@ -2,8 +2,8 @@ import 'package:flutter_application_1/models/todo_models.dart';
 
 class TodoControllers {
   List<TodoModels> list = [
-    TodoModels(name: 'maktabga borish', date: '12-02-2025', isDone: false),
-    TodoModels(name: 'uxlash', date: '23-05-2024', isDone: false),
+    TodoModels(name: 'maktabga borish', date: '2025-02-12', isDone: false),
+    TodoModels(name: 'uxlash', date: '2024-05-06', isDone: false),
   ];
 
   void add(String name, String date, bool isDone) {

@@ -6,12 +6,14 @@ class TodoWidget extends StatefulWidget {
   final Function() onDelete;
   final Function() onEdit;
   final Function() onPress;
+  final Function() onTapp;
   TodoWidget(
       {super.key,
       required this.todoModels,
       required this.onDelete,
       required this.onEdit,
-      required this.onPress});
+      required this.onPress,
+      required this.onTapp});
 
   @override
   State<TodoWidget> createState() => _TodoWidgetState();
@@ -22,11 +24,7 @@ class _TodoWidgetState extends State<TodoWidget> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: IconButton(
-          onPressed: () {
-            widget.todoModels.isDone = !widget.todoModels.isDone;
-
-            setState(() {});
-          },
+          onPressed: widget.onTapp,
           icon: Icon(
             widget.todoModels.isDone
                 ? Icons.check_circle_outlined
@@ -36,6 +34,9 @@ class _TodoWidgetState extends State<TodoWidget> {
       title: Text(
         widget.todoModels.name,
         style: TextStyle(
+            decorationColor: Colors.red,
+            color: widget.todoModels.isDone ? Colors.black54 : null,
+            decorationThickness: 1.5,
             decoration:
                 widget.todoModels.isDone ? TextDecoration.lineThrough : null,
             fontWeight: FontWeight.w600,

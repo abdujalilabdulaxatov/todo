@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controllers/todo_controllers.dart';
 import 'package:flutter_application_1/views/widgets/add_todo.dart';
+import 'package:flutter_application_1/views/widgets/edit_todo.dart';
 import 'package:flutter_application_1/views/widgets/todo_widget.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,11 +36,19 @@ class _HomeScreenState extends State<HomeScreen> {
               return AddTodo();
             },
           );
-          if (data?['date'].isEmpty) {
-            todoControllers.add(
-                data!['name'], DateTime.now().toString().split(' ')[0], false);
-          } else {
-            todoControllers.add(data!['name'], data['date'], false);
+
+          if (data?['name'] != null) {
+            print("birinchi if");
+            if (data!['date'] != '') {
+              print(data['date']);
+              print("ikkinchi if");
+              todoControllers.add(data['name'], data['date'], false);
+            } else {
+              todoControllers.add(
+                  data['name'], DateTime.now().toString().split(' ')[0], false);
+              print(data['date']);
+              print("object");
+            }
           }
           setState(() {});
         },
@@ -90,7 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         barrierDismissible: false,
                         context: context,
                         builder: (ctx) {
-                          return AddTodo();
+                          return EditTodo(
+                            index: index,
+                          );
                         },
                       );
                       if (data?['date'].isEmpty) {
@@ -103,6 +114,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       setState(() {});
                     },
                     onPress: () {
+                      setState(() {});
+                    },
+                    onTapp: () {
+                      todoControllers.list[index].isDone =
+                          !todoControllers.list[index].isDone;
                       setState(() {});
                     },
                   );

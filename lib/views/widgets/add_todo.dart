@@ -19,6 +19,9 @@ class _AddTodoState extends State<AddTodo> {
     if (_dateTime.toString().isNotEmpty) {
       _dateTextEditingController.text = _dateTime.toString().split(' ')[0];
       setState(() {});
+    } else {
+      _dateTextEditingController.text = DateTime.now().toString().split(' ')[0];
+      setState(() {});
     }
   }
 
@@ -76,7 +79,7 @@ class _AddTodoState extends State<AddTodo> {
                   Navigator.pop(context);
                 },
                 child: const Text(
-                  'Canscel',
+                  'Cancel',
                   style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.w600,
